@@ -28,6 +28,7 @@ public class JedisUtil {
 //        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
 //        jedisPoolConfig.setMaxTotal(maxActive);
 //        jedisPoolConfig.setMinIdle(minIdle);
+
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, "127.0.0.1", 6379, 300, "chryl");
         return jedisPool;
 

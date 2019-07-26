@@ -37,14 +37,14 @@ public class MyRedisSessionDao extends AbstractSessionDAO {
     //保存session
     private void saveSession(Session session) {
         if (session != null && session.getId() != null) {
-
+            //redis key 前缀+session,getId
+            byte[] key = getKey(session.getId().toString());
+            //redis value保存sesson对象
+            byte[] value = SerializationUtils.serialize(session);
+            jedisUtil.set(key, value);
+            jedisUtil.expire(key, 600);
         }
-        //redis key 前缀+session,getId
-        byte[] key = getKey(session.getId().toString());
-        //redis value保存sesson对象
-        byte[] value = SerializationUtils.serialize(session);
-        jedisUtil.set(key, value);
-        jedisUtil.expire(key, 600);
+
     }
 
     //创建
@@ -61,7 +61,7 @@ public class MyRedisSessionDao extends AbstractSessionDAO {
     @Override
     protected Session doReadSession(Serializable sessionId) {
         //测试redis访问次数
-        log.info("测试redis访问次数:{}","read session");
+        log.info("测试redis访问次数:{}", "read session");
         //获得session
         if (sessionId == null) {
             return null;
